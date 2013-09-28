@@ -25,15 +25,16 @@ describe 'Poker' do
       expect(deck.cards.sample).to be_an_instance_of(Card)
     end
 
-    describe '#deal_hand' do
-      it "should return an array of 5 Card objects" do
-        deck.deal_hand.count.should == 5
-        expect(deck.deal_hand.sample).to be_an_instance_of(Card)
+    describe '#deal' do
+      it "should return the requested amount of Card objects" do
+        expect(deck.deal(5).count).to eq 5
+        expect(deck.deal(1).first).to be_an_instance_of(Card)
       end
 
       it "should remove dealt cards from the deck" do
-        deck.deal_hand
+        hand = deck.deal(5)
         expect(deck.cards.count).to eq(47)
+        expect(deck.cards).not_to include(hand.first)
       end
     end
   end

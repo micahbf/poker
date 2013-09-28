@@ -51,4 +51,5 @@ class Game
 
     end
     # side pots
+  end
 end
