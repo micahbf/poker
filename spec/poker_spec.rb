@@ -91,7 +91,7 @@ describe 'Poker' do
             Card.new(5,:D)
             ] )
 
-          expect(two_pair_hand.hand_type).to eq([:two_pair, [2,3]])
+          expect(two_pair_hand.hand_type).to eq([:two_pair, [3, 2]])
         end
 
         it "does not recognize a three of a kind" do
@@ -155,7 +155,7 @@ describe 'Poker' do
             Card.new(3,:D)
             ] )
 
-          expect(full_house_hand.hand_type).to eq([:full_house, [3,2]])
+          expect(full_house_hand.hand_type).to eq([:full_house, [2, 3]])
         end
 
         it "does not recognize four of a kind" do

@@ -55,7 +55,7 @@ class Hand
         next if index == card_values.length - 2
         pair_values << value if value == card_values[index + 1]
       end
-      return [:two_pair, pair_values]
+      return [:two_pair, pair_values.sort.reverse]
     end
     false
   end
@@ -124,8 +124,8 @@ class Hand
       card_values.each do |val|
         val_count = card_values.select {|v| v == val}.count
         return false if val_count == 1
-        full_house_vals[0] = val if val_count == 2
-        full_house_vals[1] = val if val_count == 3
+        full_house_vals[1] = val if val_count == 2
+        full_house_vals[0] = val if val_count == 3
       end
       return [:full_house, full_house_vals]
     end
