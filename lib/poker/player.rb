@@ -15,7 +15,7 @@ class Player
     discards.each do |card_index|
       @hand[card_index - 1] = nil
     end
-    @hand.compact
+    @hand.compact!
   end
 
   def add_card(card)
