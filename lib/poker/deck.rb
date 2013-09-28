@@ -23,12 +23,8 @@ class Deck
     @cards.shuffle!
   end
 
-  def deal_hand
-    hand = []
-    5.times do
-      hand << @cards.pop
-    end
-    hand
+  def deal(num_cards)
+    @cards.pop(num_cards)
   end
 
   def deal_a_card
