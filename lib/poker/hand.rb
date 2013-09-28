@@ -1,4 +1,6 @@
 class Hand
+  include Comparable
+  
   attr_reader :current_hand
 
   HAND_TYPES = [:high_card, :pair, :two_pair, :three_kind, :straight, :flush, :full_house, :four_kind, :straight_flush, :royal_flush]
@@ -17,6 +19,30 @@ class Hand
       return found_hand if found_hand
     end
   end
+  
+  def <=> (other_hand)
+    this_type, this_value = self.hand_type
+    other_type, other_value = other_hand.hand_type
+    case HAND_TYPES.index(this_type) <=> HAND_TYPES.index(other_type)
+    when 1
+      return 1
+    when -1
+      return -1
+    when 0
+      if this_value.is_a?(Integer)
+        return this_value <=> other_value
+      elsif (this_value.first <=> other_value.first) != 0
+        return this_value.first <=> other_value.first
+      elsif (this_value.last <=> other_value.last) != 0
+        return this_value.last <=> other_value.last
+      else
+        return 0
+      end
+    end
+  end
+      
+  
+  private
 
   def high_card
     card_values = []
