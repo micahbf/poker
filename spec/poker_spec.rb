@@ -8,10 +8,12 @@ require 'poker/deck'
 describe 'Poker' do
 
   describe Card do
-    subject(:card) { Card.new(:A, :S) }
+    subject(:card) { Card.new(11, :spades) }
 
-    its(:value) { should eq :A }
-    its(:suit) { should eq :S }
+    its(:value) { should eq 11 }
+    its(:suit) { should eq :spades }
+    its(:color) { should eq :black }
+    its(:face) { should eq :jack }
   end
 
   describe Player do

@@ -23,4 +23,13 @@ class Card
       return :red
     end
   end
+  
+  def face
+    case @value
+    when (2..10)
+      return @value
+    when (11..14)
+      return FACE_CARDS[@value]
+    end
+  end
 end
