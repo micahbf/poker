@@ -86,7 +86,6 @@ class Game
     
     active_players.sort! { |p1, p2| p1.hand <=> p2.hand }
     winners = []
-    split = 1
     active_players.reverse.each_with_index do |player, index|
       next if index == active_players.count - 1
       winners << player
