@@ -1,3 +1,6 @@
+# encoding: utf-8
+require 'colorize'
+
 class Card
   attr_reader :value, :suit
 
@@ -8,6 +11,12 @@ class Card
     12 => :queen,
     13 => :king,
     14 => :ace
+  }
+  UNICODE_SUITS = {
+    :spades => '♠',
+    :clubs => '♣',
+    :hearts => '♥',
+    :diamonds => '♦'
   }
 
   def initialize(value, suit)
@@ -29,7 +38,11 @@ class Card
     when (2..10)
       return @value
     when (11..14)
-      return FACE_CARDS[@value]
+      return FACE_CARDS[@value].to_s[0].upcase
     end
+  end
+  
+  def render_fancy
+    "#{face}#{UNICODE_SUITS[@suit]} ".colorize(:color => color, :background => :white)
   end
 end

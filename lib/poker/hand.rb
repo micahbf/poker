@@ -11,7 +11,7 @@ class Hand
   def render
     render = ""
     @cards.each do |card|
-      render << "#{card.face} #{card.suit} | "
+      render << "#{card.render_fancy} "
     end
     render
   end
