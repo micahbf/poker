@@ -1,8 +1,7 @@
 class Hand
   include Comparable
+  include Enumerable
   
-  attr_reader :cards
-
   HAND_TYPES = [:high_card, :pair, :two_pair, :three_kind, :straight, :flush, :full_house, :four_kind, :straight_flush, :royal_flush]
 
   def initialize(hand)
@@ -39,6 +38,18 @@ class Hand
         return 0
       end
     end
+  end
+  
+  def each(&prc)
+    @cards.each(&prc)
+  end
+  
+  def [](card_index)
+    @cards[card_index]
+  end
+  
+  def []=(card_index, value)
+    @cards[card_index] = value
   end
   
   private

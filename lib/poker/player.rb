@@ -1,8 +1,10 @@
 class Player
   attr_accessor :hand, :stash
 
-  def initialize
-    @stash = 0
+  def initialize(starting_stash)
+    @stash = starting_stash
+    @name = get_name
+    @hand = nil
   end
 
   def bet_turn
@@ -10,7 +12,7 @@ class Player
   end
 
   def discard
-    "Pick up to three cards to discard. (1,2,3,4,or 5)"
+    "Pick up to three cards to discard. (1 - 5)"
     @hand.display_hand
     discards = gets.chomp.split(",").map(&:to_i)
     discards.each do |card_index|
@@ -21,5 +23,13 @@ class Player
 
   def add_card(card)
     @hand << card
+  end
+  
+  private
+  
+  def get_name
+    puts "Enter player name"
+    print "> "
+    gets.chomp
   end
 end

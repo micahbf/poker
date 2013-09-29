@@ -14,7 +14,7 @@ class Game
       active_players = @players.dup
 
       @players.each do |player|
-        player.hand = deck.deal(5)
+        player.hand = Hand.new(deck.deal(5))
       end
 
       pot += betting_round(active_players)
