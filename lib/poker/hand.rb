@@ -1,16 +1,16 @@
 class Hand
   include Comparable
   
-  attr_reader :current_hand
+  attr_reader :cards
 
   HAND_TYPES = [:high_card, :pair, :two_pair, :three_kind, :straight, :flush, :full_house, :four_kind, :straight_flush, :royal_flush]
 
   def initialize(hand)
-    @current_hand = hand
+    @cards = hand
   end
 
   def display_hand
-    p @current_hand
+    p @cards
   end
 
   def hand_type
@@ -40,13 +40,12 @@ class Hand
       end
     end
   end
-      
   
   private
 
   def high_card
     card_values = []
-    @current_hand.each do |card|
+    @cards.each do |card|
       card_values << card.value
     end
     [:high_card, card_values.sort.last]
@@ -54,7 +53,7 @@ class Hand
 
   def pair
     card_values = []
-    @current_hand.each do |card|
+    @cards.each do |card|
       card_values << card.value
     end
 
@@ -71,7 +70,7 @@ class Hand
 
   def two_pair
     card_values = []
-    @current_hand.each do |card|
+    @cards.each do |card|
       card_values << card.value
     end
 
@@ -88,7 +87,7 @@ class Hand
 
   def three_kind
     card_values = []
-    @current_hand.each do |card|
+    @cards.each do |card|
       card_values << card.value
     end
 
@@ -105,7 +104,7 @@ class Hand
 
   def straight
     card_values = []
-    @current_hand.each do |card|
+    @cards.each do |card|
       card_values << card.value
     end
 
@@ -124,13 +123,13 @@ class Hand
 
   def flush
     suits = []
-    @current_hand.each do |card|
+    @cards.each do |card|
       suits << card.suit
     end
 
     if suits.uniq.count == 1
       card_values = []
-      @current_hand.each do |card|
+      @cards.each do |card|
         card_values << card.value
       end
       return [:flush, card_values.sort.last]
@@ -140,7 +139,7 @@ class Hand
 
   def full_house
     card_values = []
-    @current_hand.each do |card|
+    @cards.each do |card|
       card_values << card.value
     end
 
@@ -160,7 +159,7 @@ class Hand
 
   def four_kind
     card_values = []
-    @current_hand.each do |card|
+    @cards.each do |card|
       card_values << card.value
     end
 
@@ -188,6 +187,4 @@ class Hand
     end
     false
   end
-
-
 end
