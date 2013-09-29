@@ -29,6 +29,8 @@ class Player
       retry
     end
     
+    amount = amount.to_i if amount
+    
     case action
     when "F"
       return false
@@ -45,20 +47,16 @@ class Player
       return new_bet
     end
   end
-      
     
   def discard
-    "Pick up to three cards to discard. (1 - 5)"
-    @hand.display_hand
-    discards = gets.chomp.split(",").map(&:to_i)
-    discards.each do |card_index|
-      @hand[card_index - 1] = nil
-    end
-    @hand.compact!
-  end
-
-  def add_card(card)
-    @hand << card
+    puts "Player: #{@name}"
+    "Pick up to three cards to discard. e.g. 1, 2, 5"
+    puts @hand.render
+    print = "> "
+    discards = gets.chomp.split(/\s*,\s*/).map(&:to_i)
+    @hand.discard(discards)
+    
+    discards.count
   end
   
   private
