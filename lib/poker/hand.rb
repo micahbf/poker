@@ -8,8 +8,12 @@ class Hand
     @cards = hand
   end
 
-  def display_hand
-    p @cards
+  def render
+    render = ""
+    @cards.each do |card|
+      render << "#{card.face} #{card.suit} | "
+    end
+    render
   end
 
   def hand_type
@@ -50,6 +54,10 @@ class Hand
   
   def []=(card_index, value)
     @cards[card_index] = value
+  end
+  
+  def <<(cards)
+    @cards += cards
   end
   
   def discard!(card_indices)
