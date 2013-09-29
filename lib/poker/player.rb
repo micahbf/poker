@@ -1,7 +1,8 @@
 class Player
-  attr_accessor :hand
+  attr_accessor :hand, :stash
 
   def initialize
+    @stash = 0
   end
 
   def bet_turn

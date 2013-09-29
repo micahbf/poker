@@ -1,47 +1,57 @@
 class Game
-  def initialize(num_players)
-    @num_players = num_players
-    @players = []
-    num_players.times do |num|
-      @players << Player.new(num)
-    end
+  def initialize(num_players, starting_money)
+    @players = Array.new(num_players) { Player.new(starting_money) }
   end
 
   def play
-
     until @players.count <= 1
+      #TODO: side pots
+      
       deck = Deck.new
       deck.shuffle!
+      pot = 0
 
       active_players = @players.dup
 
       @players.each do |player|
-        player.hand = deck.deal_hand
+        player.hand = deck.deal(5)
       end
 
-      # => betting loop
-      betting_round(active_players)
+      pot += betting_round(active_players)
+      if active_players.count == 1
+        active_players.first.stash += pot
+        next
+      end
 
-
-      # => each player discards
-      # => deal new cards
-
-      active_players.each do |active_player|
-        discard_count = active_player.discard
-        discard_count.times do
-          active_player.add_card(deck.deal_a_card)
+      active_players.each do |player|
+        discarded_count = player.discard.count
+        player.hand += deck.deal(discarded_count)
+      end
+      
+      pot += betting_round(active_players)
+      if active_players.count == 1
+        active_players.first.stash += pot
+        next
+      end
+      
+      active_players.sort! { |p1, p2| p1.hand <=> p2.hand }
+      winners = []
+      split = 1
+      active_players.reverse.each_with_index do |player, index|
+        next if index == active_players.count - 1
+        winners << player
+        if player.hand == active_players[index + 1].hand
+          split += 1
+        else
+          break
         end
       end
 
-      # => betting loop
-      # => if all but one folds, player gets pot
-      # => if no folds, reveal hands and determine winner
-      # => distribute pot
-      # => kick player out if no money
-
-
+      winners.each do |winner|
+        winner.stash += pot / split
+      end
+      @players.delete_if { |p| p.stash == 0 }
     end
-    # side pots
   end
   
   private
