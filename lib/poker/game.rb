@@ -71,7 +71,7 @@ class Game
         if player_bet
           raise IllegalBetError if player_bet + money_in[player] < to_match
           money_in[player] += player_bet
-          to_match += player_bet #FIX ME
+          to_match += player_bet - to_match
         else
           active_players.delete(player)
         end
@@ -83,3 +83,10 @@ class Game
     money_in.values.inject(:+)
   end
 end
+
+
+if __FILE__ == $PROGRAM_NAME
+  g = Game.new(3, 500)
+  g.play
+end
+  
