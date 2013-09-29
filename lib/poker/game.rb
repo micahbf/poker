@@ -1,6 +1,6 @@
 class Game
-  def initialize(num_players, starting_money)
-    @players = Array.new(num_players) { Player.new(starting_money) }
+  def initialize(num_players, starting_stash)
+    @players = Array.new(num_players) { Player.new(starting_stash) }
   end
 
   def play
