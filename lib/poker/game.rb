@@ -20,17 +20,8 @@ class Game
       end
 
       # => betting loop
-      last_raiser = nil
-      until active_players.count == 1
-        max_bet = 0
-        active_players.each do |player|
-          break if player == last_raiser
-          player_bet = player.bet_turn(max_bet)
-          last_raiser = player if player_bet > max_bet
-          player_bet ? max_bet = player_bet : active_players.delete(player)
-          last_raiser ||= player
-        end
-      end
+      betting_round(active_players)
+
 
       # => each player discards
       # => deal new cards
@@ -51,5 +42,32 @@ class Game
 
     end
     # side pots
+  end
+  
+  private
+  
+  def betting_round(active_players)
+    last_raiser = nil
+    to_match = 0
+    money_in = Hash.new(0)
+    
+    until active_players.count == 1
+      active_players.each do |player|
+        break if player == last_raiser
+        
+        player_bet = player.bet(money_in[player], to_match)
+        if player_bet
+          raise IllegalBetError if player_bet + money_in[player] < to_match
+          money_in[player] += player_bet
+          to_match += player_bet
+        else
+          active_players.delete(player)
+        end
+        
+        last_raiser = player if player_bet > 0
+        last_raiser ||= player
+      end
+    end
+    money_in.values.inject(:+)
   end
 end
