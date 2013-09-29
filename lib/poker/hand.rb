@@ -52,6 +52,13 @@ class Hand
     @cards[card_index] = value
   end
   
+  def discard!(card_indices)
+    card_indices.each do |card_index|
+      @cards[card_index] = nil
+    end
+    @cards.compact!
+  end
+  
   private
 
   def high_card

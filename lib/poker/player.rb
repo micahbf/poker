@@ -54,7 +54,7 @@ class Player
     puts @hand.render
     print = "> "
     discards = gets.chomp.split(/\s*,\s*/).map(&:to_i)
-    @hand.discard(discards)
+    @hand.discard!(discards)
     
     discards.count
   end
