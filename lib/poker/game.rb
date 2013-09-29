@@ -18,18 +18,19 @@ class Game
       deal_new_hands(deck)
       
       catch :round_over do
-        pot += betting_round(active_players)
+        pot += betting_round(active_players, pot)
 
         active_players.each do |player|
           discarded_count = player.discard.count
           player.hand << deck.deal(discarded_count)
         end
       
-        pot += betting_round(active_players)
+        pot += betting_round(active_players, pot)
       end
+      active_players.compact!
       
       winners = winners(active_players)
-      reveal_hands(active_players)
+      reveal_hands(active_players) if active_players.count > 1
       win_message(winners)
 
       winners.each do |winner|
@@ -42,32 +43,35 @@ class Game
   
   private
   
-  def betting_round(active_players)
+  def betting_round(active_players, pot)
     last_raiser = nil
     to_match = 0
     money_in = Hash.new(0)
     
     catch :done do
-      until active_players.count == 1
-        active_players.each do |player|
+      until active_players.count { |p| !p.nil? } == 1
+        active_players.each_with_index do |player, index|
+          next if player.nil?
           throw :done if player == last_raiser
         
-          curr_pot = money_in.values.inject(:+)
-          player_bet = player.bet(money_in[player], to_match, curr_pot)
+          curr_pot = money_in.values.inject(:+) || 0
+          player_bet = player.bet(money_in[player], to_match, pot + curr_pot)
         
           if player_bet
             money_in[player] += player_bet
-            to_match += player_bet - to_match if player_bet - to_match > 0
+            raised = player_bet - to_match
+            to_match += raised if raised > 0
           else
-            active_players.delete(player)
+            active_players[index] = nil
           end
         
-          throw :round_over if active_players.count == 1
-          last_raiser = player if player_bet && player_bet > 0
+          throw :round_over if active_players.count { |p| !p.nil? } == 1
+          last_raiser = player if raised && raised > 0
           last_raiser ||= player
         end
       end
     end
+    active_players.compact!
     money_in.values.inject(:+)
   end
   
@@ -78,6 +82,8 @@ class Game
   end
   
   def winners(active_players)
+    return active_players if active_players.count == 1
+    
     active_players.sort! { |p1, p2| p1.hand <=> p2.hand }
     winners = []
     split = 1
