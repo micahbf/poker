@@ -7,10 +7,46 @@ class Player
     @hand = nil
   end
 
-  def bet_turn
-
+  def bet(money_in, to_match, pot)
+    #TODO: side pots/all in
+    puts "Player: #{@name}"
+    puts "Stash: #{@stash} Money in: #{money_in} To match: #{to_match} Pot: #{pot}"
+    options = []
+    options += ["[C]heck","[B]et [amount]"]  if to_match - money_in == 0
+    options += ["[C]all", "[R]aise [amount]"] if to_match - money_in > 0
+    options << "[F]old"
+    
+    begin
+      print "> "
+      action, amount = gets.chomp.upcase.split
+      valid_actions = options.map { |o| o[1] }
+      raise "Invalid action" unless valid_actions.include?(action)
+      raise "Specify amount" if ["B", "R"].include?(action) && amount.nil?
+      raise "You don't have that much" if amount && amount.to_i > @stash
+      raise "You must bet more" if action == "R" && money_in + amount <= to_match
+    rescue StandardError => error
+      puts "#{error}, try again."
+      retry
+    end
+    
+    case action
+    when "F"
+      return false
+    when "C"
+      new_bet = to_match - money_in
+      @stash -= new_bet
+      return new_bet
+    when "B"
+      @stash -= amount
+      return amount
+    when "R"
+      new_bet = (to_match - money_in) + amount
+      @stash -= new_bet
+      return new_bet
+    end
   end
-
+      
+    
   def discard
     "Pick up to three cards to discard. (1 - 5)"
     @hand.display_hand

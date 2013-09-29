@@ -65,11 +65,13 @@ class Game
       active_players.each do |player|
         break if player == last_raiser
         
-        player_bet = player.bet(money_in[player], to_match)
+        curr_pot = money_in.values.inject(:+)
+        player_bet = player.bet(money_in[player], to_match, curr_pot)
+        
         if player_bet
           raise IllegalBetError if player_bet + money_in[player] < to_match
           money_in[player] += player_bet
-          to_match += player_bet
+          to_match += player_bet #FIX ME
         else
           active_players.delete(player)
         end
